@@ -32,6 +32,41 @@ def fetch(city: str, max_results: int):
     console.print(f"\n[bold green]Done.[/bold green] Imported {new} leads from {city}.")
 
 
+@cli.command("score-websites")
+@click.option("--rescore", is_flag=True, help="Re-score leads that already have a web score")
+def score_websites(rescore: bool):
+    """Check every lead's website quality and store a score (0-100, lower = worse)."""
+    from db.database import fetch_leads, get_conn, update_web_score
+    from leads.website_checker import score_website
+
+    conn = get_conn()
+    leads = fetch_leads(conn)
+    skipped = scored = 0
+
+    for lead in leads:
+        if lead["web_score"] is not None and not rescore:
+            skipped += 1
+            continue
+
+        result = score_website(lead["website"] or "")
+        update_web_score(conn, lead["id"], result["has_website"], result["web_score"], result["web_issues"])
+        scored += 1
+
+        if not result["has_website"]:
+            icon, label = "[red]✗[/red]", "NO SITE"
+        elif result["web_score"] < 40:
+            icon, label = "[red]✗[/red]", f"score {result['web_score']}/100"
+        elif result["web_score"] < 70:
+            icon, label = "[yellow]~[/yellow]", f"score {result['web_score']}/100"
+        else:
+            icon, label = "[green]✓[/green]", f"score {result['web_score']}/100"
+
+        console.print(f"  {icon} {lead['name']:<40} {label}  {result['web_issues']}")
+
+    console.print(f"\n[bold green]Done.[/bold green] Scored: {scored}  Skipped (cached): {skipped}")
+    console.print("[dim]Tip: leads with score <40 or no website = best targets for a web+marketing pitch.[/dim]")
+
+
 @cli.command()
 def segment():
     """Score and assign tiers (hot/warm/cold) to all leads based on review count."""

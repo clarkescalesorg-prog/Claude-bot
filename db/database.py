@@ -21,7 +21,19 @@ def get_conn(db_path: str = None) -> sqlite3.Connection:
 def _init_schema(conn: sqlite3.Connection) -> None:
     schema_path = Path(__file__).parent / "schema.sql"
     conn.executescript(schema_path.read_text())
+    _migrate(conn)
     conn.commit()
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    existing = {row[1] for row in conn.execute("PRAGMA table_info(leads)")}
+    for col, ddl in [
+        ("has_website", "INTEGER DEFAULT NULL"),
+        ("web_score",   "INTEGER DEFAULT NULL"),
+        ("web_issues",  "TEXT DEFAULT NULL"),
+    ]:
+        if col not in existing:
+            conn.execute(f"ALTER TABLE leads ADD COLUMN {col} {ddl}")
 
 
 def upsert_lead(conn: sqlite3.Connection, lead: dict) -> int:
@@ -94,6 +106,14 @@ def mark_message_sent(conn: sqlite3.Connection, message_id: int, twilio_sid: str
 
 def mark_message_failed(conn: sqlite3.Connection, message_id: int) -> None:
     conn.execute("UPDATE messages SET status='failed' WHERE id=?", (message_id,))
+    conn.commit()
+
+
+def update_web_score(conn: sqlite3.Connection, lead_id: int, has_website: bool, web_score: int, web_issues: str) -> None:
+    conn.execute(
+        "UPDATE leads SET has_website=?, web_score=?, web_issues=?, updated_at=datetime('now') WHERE id=?",
+        (int(has_website), web_score, web_issues, lead_id),
+    )
     conn.commit()
 
 

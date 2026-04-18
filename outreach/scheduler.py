@@ -20,7 +20,13 @@ def queue_outreach(conn: sqlite3.Connection, lead: sqlite3.Row) -> None:
     now = datetime.utcnow()
     for step, day_offset in FOLLOW_UP_DAYS.items():
         due = now + timedelta(days=day_offset)
-        body = render(step, lead["name"], lead["city"])
+        body = render(
+            step,
+            lead["name"],
+            lead["city"],
+            has_website=lead["has_website"],
+            web_score=lead["web_score"],
+        )
         log_message(conn, lead["id"], step, OUTREACH_CHANNEL, body, due.isoformat(sep=" ", timespec="seconds"))
 
     update_lead_status(conn, lead["id"], "contacted")
