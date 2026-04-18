@@ -1,16 +1,17 @@
 CREATE TABLE IF NOT EXISTS leads (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    place_id    TEXT    UNIQUE NOT NULL,
-    name        TEXT    NOT NULL,
-    phone       TEXT,
-    website     TEXT,
-    city        TEXT,
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    place_id     TEXT    UNIQUE NOT NULL,
+    name         TEXT    NOT NULL,
+    phone        TEXT,
+    website      TEXT,
+    city         TEXT,
     review_count INTEGER DEFAULT 0,
-    rating      REAL    DEFAULT 0.0,
-    tier        TEXT    CHECK(tier IN ('hot','warm','cold')) DEFAULT NULL,
-    status      TEXT    CHECK(status IN ('new','contacted','replied','booked','rejected','unsubscribed')) DEFAULT 'new',
-    created_at  TEXT    DEFAULT (datetime('now')),
-    updated_at  TEXT    DEFAULT (datetime('now'))
+    rating       REAL    DEFAULT 0.0,
+    website_score INTEGER DEFAULT NULL,
+    tier         TEXT    CHECK(tier IN ('hot','warm','cold')) DEFAULT NULL,
+    status       TEXT    CHECK(status IN ('new','contacted','replied','booked','rejected','unsubscribed')) DEFAULT 'new',
+    created_at   TEXT    DEFAULT (datetime('now')),
+    updated_at   TEXT    DEFAULT (datetime('now'))
 );
 
 CREATE TABLE IF NOT EXISTS messages (

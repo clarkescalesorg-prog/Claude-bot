@@ -7,19 +7,19 @@ console = Console()
 
 @click.group()
 def cli():
-    """Roofer Outreach Bot — find UK roofers, segment by reviews, send SMS/WhatsApp."""
+    """Miami Roofing Lead Bot — find Miami roofers with weak websites, segment by site quality, send SMS/WhatsApp."""
 
 
 @cli.command()
-@click.option("--city", required=True, help="UK city to search (e.g. 'Manchester')")
+@click.option("--city", default="Miami", show_default=True, help="Florida city to search (e.g. 'Miami')")
 @click.option("--max", "max_results", default=60, show_default=True, help="Max leads to fetch")
 def fetch(city: str, max_results: int):
-    """Fetch roofer leads from Google Places API."""
+    """Fetch roofing leads from Google Places and score their website quality."""
     from db.database import get_conn, upsert_lead
     from leads.google_places import fetch_roofers
 
     conn = get_conn()
-    console.print(f"[cyan]Searching for roofers in {city}...[/cyan]")
+    console.print(f"[cyan]Searching for roofing contractors in {city}, Florida...[/cyan]")
 
     leads = fetch_roofers(city, max_results)
     new = 0
@@ -27,23 +27,25 @@ def fetch(city: str, max_results: int):
         lead["city"] = lead.get("city") or city
         upsert_lead(conn, lead)
         new += 1
-        console.print(f"  [green]+[/green] {lead['name']} ({lead['review_count']} reviews)")
+        score = lead["website_score"]
+        site_label = {0: "[red]no website[/red]", 1: "[yellow]poor site[/yellow]", 2: "[green]ok site[/green]"}.get(score, "?")
+        console.print(f"  [green]+[/green] {lead['name']} — {site_label} ({lead['review_count']} reviews)")
 
-    console.print(f"\n[bold green]Done.[/bold green] Imported {new} leads from {city}.")
+    console.print(f"\n[bold green]Done.[/bold green] Imported {new} leads from {city}, FL.")
 
 
 @cli.command()
 def segment():
-    """Score and assign tiers (hot/warm/cold) to all leads based on review count."""
+    """Score and assign tiers (hot/warm/cold) to all leads based on website quality."""
     from db.database import get_conn
     from leads.segmentation import assign_tiers
 
     conn = get_conn()
     counts = assign_tiers(conn)
-    console.print("[bold]Segmentation complete:[/bold]")
-    console.print(f"  [red]Hot[/red]  (50+ reviews): {counts['hot']}")
-    console.print(f"  [yellow]Warm[/yellow] (20-49 reviews): {counts['warm']}")
-    console.print(f"  [blue]Cold[/blue] (<20 reviews):  {counts['cold']}")
+    console.print("[bold]Segmentation complete (by website quality):[/bold]")
+    console.print(f"  [red]Hot[/red]  (no website):   {counts['hot']}")
+    console.print(f"  [yellow]Warm[/yellow] (poor website): {counts['warm']}")
+    console.print(f"  [blue]Cold[/blue] (ok website):  {counts['cold']}")
 
 
 @cli.command()
