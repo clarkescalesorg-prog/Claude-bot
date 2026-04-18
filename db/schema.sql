@@ -9,6 +9,17 @@ CREATE TABLE IF NOT EXISTS leads (
     rating      REAL    DEFAULT 0.0,
     tier        TEXT    CHECK(tier IN ('hot','warm','cold')) DEFAULT NULL,
     status      TEXT    CHECK(status IN ('new','contacted','replied','booked','rejected','unsubscribed')) DEFAULT 'new',
+    fb_page_id      TEXT,
+    fb_page_url     TEXT,
+    fb_username     TEXT,
+    fb_category     TEXT,
+    fb_fan_count    INTEGER,
+    fb_rating       REAL,
+    fb_rating_count INTEGER,
+    fb_verified     TEXT,
+    fb_is_active    INTEGER,
+    fb_last_post_at TEXT,
+    fb_checked_at   TEXT,
     created_at  TEXT    DEFAULT (datetime('now')),
     updated_at  TEXT    DEFAULT (datetime('now'))
 );

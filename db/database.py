@@ -21,7 +21,30 @@ def get_conn(db_path: str = None) -> sqlite3.Connection:
 def _init_schema(conn: sqlite3.Connection) -> None:
     schema_path = Path(__file__).parent / "schema.sql"
     conn.executescript(schema_path.read_text())
+    _migrate(conn)
     conn.commit()
+
+
+_LEAD_COLUMNS: list[tuple[str, str]] = [
+    ("fb_page_id", "TEXT"),
+    ("fb_page_url", "TEXT"),
+    ("fb_username", "TEXT"),
+    ("fb_category", "TEXT"),
+    ("fb_fan_count", "INTEGER"),
+    ("fb_rating", "REAL"),
+    ("fb_rating_count", "INTEGER"),
+    ("fb_verified", "TEXT"),
+    ("fb_is_active", "INTEGER"),
+    ("fb_last_post_at", "TEXT"),
+    ("fb_checked_at", "TEXT"),
+]
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    existing = {row["name"] for row in conn.execute("PRAGMA table_info(leads)")}
+    for col, col_type in _LEAD_COLUMNS:
+        if col not in existing:
+            conn.execute(f"ALTER TABLE leads ADD COLUMN {col} {col_type}")
 
 
 def upsert_lead(conn: sqlite3.Connection, lead: dict) -> int:
@@ -103,3 +126,48 @@ def update_lead_status(conn: sqlite3.Connection, lead_id: int, status: str) -> N
         (status, lead_id),
     )
     conn.commit()
+
+
+def update_fb_enrichment(conn: sqlite3.Connection, lead_id: int, fb: dict) -> None:
+    conn.execute(
+        """
+        UPDATE leads SET
+            fb_page_id      = :fb_page_id,
+            fb_page_url     = :fb_page_url,
+            fb_username     = :fb_username,
+            fb_category     = :fb_category,
+            fb_fan_count    = :fb_fan_count,
+            fb_rating       = :fb_rating,
+            fb_rating_count = :fb_rating_count,
+            fb_verified     = :fb_verified,
+            fb_is_active    = :fb_is_active,
+            fb_last_post_at = :fb_last_post_at,
+            fb_checked_at   = datetime('now'),
+            updated_at      = datetime('now')
+        WHERE id = :id
+        """,
+        {"id": lead_id, **fb},
+    )
+    conn.commit()
+
+
+def fetch_fb_leads(
+    conn: sqlite3.Connection,
+    active_only: bool = True,
+    min_fans: int = 0,
+) -> list[sqlite3.Row]:
+    query = "SELECT * FROM leads WHERE fb_page_id IS NOT NULL"
+    params: list = []
+    if active_only:
+        query += " AND COALESCE(fb_is_active, 0) = 1"
+    if min_fans:
+        query += " AND COALESCE(fb_fan_count, 0) >= ?"
+        params.append(min_fans)
+    query += " ORDER BY fb_fan_count DESC"
+    return conn.execute(query, params).fetchall()
+
+
+def fetch_leads_missing_fb(conn: sqlite3.Connection) -> list[sqlite3.Row]:
+    return conn.execute(
+        "SELECT * FROM leads WHERE fb_checked_at IS NULL AND website IS NOT NULL AND website != ''"
+    ).fetchall()
