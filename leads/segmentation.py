@@ -7,7 +7,7 @@ def assign_tiers(conn: sqlite3.Connection) -> dict[str, int]:
     counts = {"hot": 0, "warm": 0, "cold": 0}
 
     for lead in leads:
-        tier = _tier_for(lead["website_score"])
+        tier = _tier_for(lead["review_count"])
         conn.execute(
             "UPDATE leads SET tier=?, updated_at=datetime('now') WHERE id=?",
             (tier, lead["id"]),
@@ -18,10 +18,9 @@ def assign_tiers(conn: sqlite3.Connection) -> dict[str, int]:
     return counts
 
 
-def _tier_for(website_score) -> str:
-    """Tier by website quality — worst sites are the best prospects."""
-    if website_score is None or website_score == 0:
-        return "hot"   # no website at all
-    if website_score == 1:
-        return "warm"  # site exists but is poor quality
-    return "cold"      # site looks adequate
+def _tier_for(review_count: int) -> str:
+    if review_count >= 50:
+        return "hot"
+    if review_count >= 20:
+        return "warm"
+    return "cold"

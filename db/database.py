@@ -15,7 +15,6 @@ def get_conn(db_path: str = None) -> sqlite3.Connection:
         _conn.row_factory = sqlite3.Row
         _conn.execute("PRAGMA journal_mode=WAL")
         _init_schema(_conn)
-        _migrate(_conn)
     return _conn
 
 
@@ -25,27 +24,18 @@ def _init_schema(conn: sqlite3.Connection) -> None:
     conn.commit()
 
 
-def _migrate(conn: sqlite3.Connection) -> None:
-    # Add website_score column if it doesn't exist (for existing databases)
-    cols = {row[1] for row in conn.execute("PRAGMA table_info(leads)")}
-    if "website_score" not in cols:
-        conn.execute("ALTER TABLE leads ADD COLUMN website_score INTEGER DEFAULT NULL")
-        conn.commit()
-
-
 def upsert_lead(conn: sqlite3.Connection, lead: dict) -> int:
     cur = conn.execute(
         """
-        INSERT INTO leads (place_id, name, phone, website, city, review_count, rating, website_score)
-        VALUES (:place_id, :name, :phone, :website, :city, :review_count, :rating, :website_score)
+        INSERT INTO leads (place_id, name, phone, website, city, review_count, rating)
+        VALUES (:place_id, :name, :phone, :website, :city, :review_count, :rating)
         ON CONFLICT(place_id) DO UPDATE SET
-            name          = excluded.name,
-            phone         = excluded.phone,
-            website       = excluded.website,
-            review_count  = excluded.review_count,
-            rating        = excluded.rating,
-            website_score = excluded.website_score,
-            updated_at    = datetime('now')
+            name         = excluded.name,
+            phone        = excluded.phone,
+            website      = excluded.website,
+            review_count = excluded.review_count,
+            rating       = excluded.rating,
+            updated_at   = datetime('now')
         """,
         lead,
     )
@@ -65,7 +55,7 @@ def fetch_leads(conn: sqlite3.Connection, tier: str = None, status: str = None) 
     if status:
         query += " AND status = ?"
         params.append(status)
-    query += " ORDER BY website_score ASC, review_count DESC"
+    query += " ORDER BY review_count DESC"
     return conn.execute(query, params).fetchall()
 
 

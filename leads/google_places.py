@@ -1,7 +1,6 @@
 import time
 import googlemaps
 from config import GOOGLE_PLACES_API_KEY
-from leads.website_checker import score_website
 
 _client: googlemaps.Client | None = None
 
@@ -15,7 +14,7 @@ def _get_client() -> googlemaps.Client:
 
 def fetch_roofers(city: str, max_results: int = 60) -> list[dict]:
     client = _get_client()
-    query = f"roofing contractor {city} Florida"
+    query = f"roofing contractor {city} UK"
     results = []
     response = client.places(query=query)
 
@@ -52,35 +51,32 @@ def _get_details(client: googlemaps.Client, place_id: str) -> dict | None:
         return None  # skip leads with no phone number
 
     city = _extract_city(result.get("address_components", []))
-    website = result.get("website", "")
-    website_score = score_website(website)
 
     return {
         "place_id": place_id,
         "name": result.get("name", ""),
-        "phone": _normalise_us_phone(phone),
-        "website": website,
+        "phone": _normalise_uk_phone(phone),
+        "website": result.get("website", ""),
         "city": city,
         "review_count": result.get("user_ratings_total", 0),
         "rating": result.get("rating", 0.0),
-        "website_score": website_score,
     }
 
 
 def _extract_city(components: list[dict]) -> str:
     for comp in components:
-        if "locality" in comp.get("types", []):
+        if "postal_town" in comp.get("types", []):
             return comp["long_name"]
     for comp in components:
-        if "sublocality" in comp.get("types", []):
+        if "locality" in comp.get("types", []):
             return comp["long_name"]
     return ""
 
 
-def _normalise_us_phone(phone: str) -> str:
-    digits = "".join(c for c in phone if c.isdigit())
-    if len(digits) == 10:
-        return "+1" + digits
-    if len(digits) == 11 and digits.startswith("1"):
-        return "+" + digits
-    return phone
+def _normalise_uk_phone(phone: str) -> str:
+    digits = "".join(c for c in phone if c.isdigit() or c == "+")
+    if digits.startswith("0"):
+        digits = "+44" + digits[1:]
+    elif digits.startswith("44") and not digits.startswith("+"):
+        digits = "+" + digits
+    return digits

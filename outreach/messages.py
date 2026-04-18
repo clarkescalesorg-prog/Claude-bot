@@ -2,20 +2,20 @@ from config import YOUR_NAME
 
 _TEMPLATES = {
     1: (
-        "Hi {first_name}, I noticed {business} doesn't have a strong web presence — "
-        "I help Miami roofing companies get more jobs with a professional website and Google/Facebook ad creatives. "
-        "We've helped similar contractors add $8k-$15k/month in new work. "
-        "Open to a free 10-min call to see what's possible? – {your_name}"
+        "Hi {first_name}, I came across {business} on Google — impressive reviews! "
+        "I run a marketing agency helping UK roofers get more jobs through Google Ads, SEO & social media. "
+        "We've helped similar companies add £10k+/month in new work. "
+        "Quick 10-min call to show you what's possible? – {your_name}"
     ),
     2: (
         "Hi {first_name}, following up from my last message. "
-        "I work with roofing companies across {city} and have a couple of openings this month. "
-        "We handle everything: new website, Google Ads, Facebook ad creatives & SEO — starting at $1,500/month. "
-        "Worth a quick chat? – {your_name}"
+        "I work with roofing companies across {city} and have a couple of slots open this month. "
+        "Full-service marketing — Google Ads, SEO, social & website — for £2,500/month. "
+        "Are you open to a quick chat? – {your_name}"
     ),
     3: (
-        "Last one from me, {first_name} — totally understand if the timing isn't right. "
-        "If you ever want more consistent roofing leads through a better website and targeted ads, feel free to reach back out. "
+        "Last one from me, {first_name} — if now's not the right time that's totally fine. "
+        "If you ever want more consistent roofing leads through Google, feel free to reach back out. "
         "Best of luck! – {your_name}"
     ),
 }
@@ -26,6 +26,6 @@ def render(step: int, business_name: str, city: str) -> str:
     return _TEMPLATES[step].format(
         first_name=first_name,
         business=business_name,
-        city=city or "Miami",
+        city=city or "your area",
         your_name=YOUR_NAME,
     )
