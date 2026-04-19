@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS leads (
     rating      REAL    DEFAULT 0.0,
     tier        TEXT    CHECK(tier IN ('hot','warm','cold')) DEFAULT NULL,
     status      TEXT    CHECK(status IN ('new','contacted','replied','booked','rejected','unsubscribed')) DEFAULT 'new',
+    source      TEXT    DEFAULT 'google',
+    linkedin_url TEXT,
     created_at  TEXT    DEFAULT (datetime('now')),
     updated_at  TEXT    DEFAULT (datetime('now'))
 );

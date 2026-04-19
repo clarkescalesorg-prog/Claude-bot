@@ -21,7 +21,16 @@ def get_conn(db_path: str = None) -> sqlite3.Connection:
 def _init_schema(conn: sqlite3.Connection) -> None:
     schema_path = Path(__file__).parent / "schema.sql"
     conn.executescript(schema_path.read_text())
+    _migrate(conn)
     conn.commit()
+
+
+def _migrate(conn: sqlite3.Connection) -> None:
+    existing = {row[1] for row in conn.execute("PRAGMA table_info(leads)")}
+    if "source" not in existing:
+        conn.execute("ALTER TABLE leads ADD COLUMN source TEXT DEFAULT 'google'")
+    if "linkedin_url" not in existing:
+        conn.execute("ALTER TABLE leads ADD COLUMN linkedin_url TEXT")
 
 
 def upsert_lead(conn: sqlite3.Connection, lead: dict) -> int:
@@ -35,6 +44,29 @@ def upsert_lead(conn: sqlite3.Connection, lead: dict) -> int:
             website      = excluded.website,
             review_count = excluded.review_count,
             rating       = excluded.rating,
+            updated_at   = datetime('now')
+        """,
+        lead,
+    )
+    conn.commit()
+    if cur.lastrowid:
+        return cur.lastrowid
+    row = conn.execute("SELECT id FROM leads WHERE place_id = ?", (lead["place_id"],)).fetchone()
+    return row["id"]
+
+
+def upsert_linkedin_lead(conn: sqlite3.Connection, lead: dict) -> int:
+    lead.setdefault("website", None)
+    lead.setdefault("review_count", 0)
+    lead.setdefault("rating", 0.0)
+    cur = conn.execute(
+        """
+        INSERT INTO leads (place_id, name, phone, website, city, review_count, rating, source, linkedin_url)
+        VALUES (:place_id, :name, :phone, :website, :city, :review_count, :rating, :source, :linkedin_url)
+        ON CONFLICT(place_id) DO UPDATE SET
+            name         = excluded.name,
+            phone        = COALESCE(excluded.phone, leads.phone),
+            linkedin_url = excluded.linkedin_url,
             updated_at   = datetime('now')
         """,
         lead,

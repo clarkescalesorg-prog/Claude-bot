@@ -87,7 +87,12 @@ LinkedIn leads flow through the same `tier` and `status` lifecycle as Google Pla
 
 ```
 01-linkedin-prospect-hunter/
-├── SKILL.md              # This file
+└── SKILL.md              # This file
+
+leads/
 ├── linkedin_hunter.py    # Core search & extraction logic
 └── li_session.py         # Session management & auth helpers
+
+db/
+└── database.py           # upsert_linkedin_lead() + schema migration
 ```
