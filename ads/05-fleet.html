@@ -7,7 +7,9 @@
 <style>
   .fleet-grid {
     position: absolute;
-    inset: 200px 40px 220px 40px;
+    left: 40px; right: 40px;
+    top: 380px;
+    bottom: 200px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
@@ -18,23 +20,28 @@
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.15);
     border-radius: 14px;
-    padding: 14px;
+    padding: 30px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     position: relative;
   }
-  .fleet-card img { width: 100%; filter: drop-shadow(0 20px 20px rgba(0,0,0,0.5)); }
+  .fleet-card img {
+    width: 100%;
+    max-height: 140px;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 18px rgba(0,0,0,0.55));
+  }
   .fleet-card .tag {
     position: absolute;
     bottom: 10px; left: 12px;
     font-family: 'Bungee', cursive;
-    font-size: 18px;
+    font-size: 16px;
     letter-spacing: 2px;
     color: #fff;
     background: rgba(0,0,0,0.55);
-    padding: 6px 12px;
+    padding: 5px 10px;
     border-radius: 999px;
   }
 </style>
@@ -46,15 +53,15 @@
     <div class="url">ogcarworld.co.uk</div>
   </header>
 
-  <div class="headline-stack top-left">
-    <span class="bubble white l">The Fleet</span>
-    <span class="bubble gold xxl tilt-right">LONDON</span>
-    <span class="bubble white m">· Delivered UK wide ·</span>
+  <div class="headline-stack" style="left:40px; top:100px; max-width:70%;">
+    <span class="bubble white m">The Fleet</span>
+    <span class="bubble gold xl">LONDON</span>
+    <span class="bubble white s">· Delivered UK wide ·</span>
   </div>
 
-  <div class="pricetag top-right">
+  <div class="pricetag" style="top:110px; right:36px;">
     <span class="from">From</span>
-    <span class="amt">£199</span>
+    <span class="amt" style="font-size:60px;">£199</span>
     <span class="per">/ day</span>
   </div>
 
@@ -67,7 +74,7 @@
 
   <footer class="footer">
     <div>
-      <div style="font-family:'Bungee'; font-size:26px; margin-bottom:8px;">
+      <div style="font-family:'Bungee'; font-size:24px; margin-bottom:8px;">
         SUPERCAR HIRE · UK
       </div>
       <div class="cta">See the Full Fleet</div>
