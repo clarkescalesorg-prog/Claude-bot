@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" aria-label="Lamborghini silhouette">
+  <defs>
+    <linearGradient id="lp" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff1a8"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#6b4d14"/>
+    </linearGradient>
+    <linearGradient id="lg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#8fd3ff"/>
+      <stop offset="1" stop-color="#1a2b46"/>
+    </linearGradient>
+  </defs>
+  <!-- shadow -->
+  <ellipse cx="600" cy="475" rx="520" ry="22" fill="rgba(0,0,0,0.55)"/>
+  <!-- body: aggressive wedge -->
+  <path d="M70,420 L160,370 L300,320 L420,230 L520,180 L760,170 L880,210 L1000,260 L1120,300 L1150,360 L1130,420 Z"
+        fill="url(#lp)" stroke="#1b1205" stroke-width="6" stroke-linejoin="round"/>
+  <!-- roof cut -->
+  <path d="M430,230 L540,190 L740,190 L820,240 L700,250 L560,255 Z" fill="url(#lg)" opacity="0.95"/>
+  <!-- side vent -->
+  <polygon points="740,330 880,320 920,360 770,370" fill="#1b1205" opacity="0.6"/>
+  <polygon points="260,340 400,320 420,360 300,380" fill="#1b1205" opacity="0.45"/>
+  <!-- headlight slash -->
+  <polygon points="120,390 190,370 210,390 140,410" fill="#fffbdc"/>
+  <!-- rear wing -->
+  <rect x="980" y="200" width="170" height="16" rx="4" fill="#1b1205"/>
+  <polygon points="980,200 1000,230 1150,230 1150,216" fill="#1b1205"/>
+  <!-- wheels -->
+  <circle cx="290" cy="420" r="78" fill="#0a0a0a"/>
+  <circle cx="290" cy="420" r="44" fill="#272727"/>
+  <circle cx="290" cy="420" r="10" fill="#d4af37"/>
+  <circle cx="940" cy="420" r="78" fill="#0a0a0a"/>
+  <circle cx="940" cy="420" r="44" fill="#272727"/>
+  <circle cx="940" cy="420" r="10" fill="#d4af37"/>
+  <!-- spokes hint -->
+  <g stroke="#bbb" stroke-width="4" opacity="0.5">
+    <line x1="290" y1="376" x2="290" y2="464"/>
+    <line x1="246" y1="420" x2="334" y2="420"/>
+    <line x1="257" y1="389" x2="323" y2="451"/>
+    <line x1="323" y1="389" x2="257" y2="451"/>
+    <line x1="940" y1="376" x2="940" y2="464"/>
+    <line x1="896" y1="420" x2="984" y2="420"/>
+    <line x1="907" y1="389" x2="973" y2="451"/>
+    <line x1="973" y1="389" x2="907" y2="451"/>
+  </g>
+</svg>

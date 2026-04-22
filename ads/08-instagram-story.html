@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>OG Car World · Instagram Story · 1080×1920</title>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+  body { min-height: 100vh; align-items: flex-start; padding: 24px; }
+  .story-stack {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    z-index: 3;
+    text-align: center;
+  }
+  .story-hero {
+    position: absolute;
+    left: 0; right: 0;
+    top: 700px;
+    z-index: 1;
+  }
+  .story-hero img { width: 100%; filter: drop-shadow(0 60px 50px rgba(0,0,0,0.55)); }
+  .price-big {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) rotate(-5deg);
+    top: 1250px;
+    z-index: 4;
+  }
+  .cta-big {
+    position: absolute;
+    left: 50%;
+    bottom: 120px;
+    transform: translateX(-50%);
+    z-index: 4;
+    padding: 28px 48px;
+    font-size: 28px;
+  }
+</style>
+</head>
+<body>
+<section class="ad ad-story bg-studio grid-lines" aria-label="Instagram story">
+  <header class="brandbar">
+    <div class="logo">OG<span class="accent">·</span>CAR WORLD</div>
+    <div class="url">ogcarworld.co.uk</div>
+  </header>
+
+  <div class="story-stack">
+    <span class="bubble white l">Luxury hire</span>
+    <span class="bubble gold xxl tilt-right">LONDON</span>
+    <span class="bubble white m">· Nationwide delivery ·</span>
+  </div>
+
+  <div class="story-hero">
+    <img src="cars/ferrari.svg" alt="Ferrari"/>
+  </div>
+
+  <div class="price-big pricetag">
+    <span class="from">From only</span>
+    <span class="amt" style="font-size:108px;">£199</span>
+    <span class="per">per day</span>
+  </div>
+
+  <div class="cta cta-big">Swipe Up to Book →</div>
+
+  <div style="position:absolute; left:0; right:0; bottom:40px; text-align:center; z-index:4; letter-spacing:3px; font-size:14px; opacity:0.8; text-transform:uppercase;">
+    Lamborghini · Ferrari · BMW · Mercedes-AMG · Rolls-Royce
+  </div>
+</section>
+</body>
+</html>

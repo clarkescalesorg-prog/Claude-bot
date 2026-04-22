@@ -1,0 +1,296 @@
+/* Shared styles for OG Car World ad creatives
+   ------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Sigmar+One&family=Luckiest+Guy&family=Inter:wght@400;600;800;900&display=swap');
+
+:root {
+  --gold: #d4af37;
+  --gold-2: #f5d97a;
+  --red: #e10600;
+  --bmw-blue: #0066b1;
+  --merc-silver: #c8ccce;
+  --ink: #0b0b0f;
+  --ink-soft: #151821;
+  --paper: #f6f6f8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #1a1a1f;
+  color: var(--paper);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* Ad canvases -------------------------------------- */
+.ad {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+  isolation: isolate;
+}
+
+.ad-square   { width: 1080px; height: 1080px; }     /* Instagram feed */
+.ad-landscape{ width: 1200px; height: 628px; }      /* Facebook / LinkedIn */
+.ad-story    { width: 1080px; height: 1920px; }     /* Instagram story / TikTok */
+
+/* Bubble-writing headline (for location + cost) ---- */
+.bubble {
+  font-family: 'Sigmar One', 'Bungee', cursive;
+  line-height: 0.95;
+  letter-spacing: 1px;
+  color: #fff;
+  text-transform: uppercase;
+  -webkit-text-stroke: 4px #0b0b0f;
+  text-shadow:
+    0 6px 0 #0b0b0f,
+    0 7px 0 #0b0b0f,
+    0 8px 0 #0b0b0f,
+    0 12px 18px rgba(0,0,0,0.55);
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+
+.bubble.gold   { color: var(--gold-2); }
+.bubble.red    { color: #ff3b3b; }
+.bubble.blue   { color: #5fb8ff; }
+.bubble.silver { color: #e9edf0; }
+.bubble.white  { color: #ffffff; }
+
+.bubble.xxl { font-size: 168px; }
+.bubble.xl  { font-size: 128px; }
+.bubble.l   { font-size: 96px; }
+.bubble.m   { font-size: 72px; }
+.bubble.s   { font-size: 54px; }
+
+.bubble.tilt-right { transform: rotate(4deg); }
+.bubble.straight   { transform: rotate(0); }
+
+/* Meta + info chips -------------------------------- */
+.brandbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  padding: 28px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 5;
+}
+
+.logo {
+  font-family: 'Bungee', cursive;
+  font-size: 32px;
+  letter-spacing: 2px;
+  color: #fff;
+}
+.logo .accent { color: var(--gold-2); }
+
+.url {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 10px 18px;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+}
+
+.specs {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.spec {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #fff;
+}
+.spec .n { color: var(--gold-2); font-size: 20px; margin-right: 6px; }
+
+.footer {
+  position: absolute;
+  left: 40px; right: 40px; bottom: 32px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  z-index: 5;
+}
+.cta {
+  display: inline-block;
+  padding: 18px 32px;
+  border-radius: 999px;
+  background: var(--gold-2);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  box-shadow: 0 10px 0 #8a6f1d, 0 20px 30px rgba(0,0,0,0.4);
+}
+.cta.white { background: #fff; }
+
+.smallprint {
+  font-size: 13px;
+  opacity: 0.7;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  max-width: 420px;
+  text-align: right;
+}
+
+/* Backgrounds -------------------------------------- */
+.bg-studio {
+  background:
+    radial-gradient(120% 80% at 50% 110%, rgba(212,175,55,0.35), transparent 60%),
+    radial-gradient(80% 60% at 50% 0%, rgba(255,255,255,0.08), transparent 60%),
+    linear-gradient(180deg, #0b0b0f 0%, #1a1a22 60%, #0b0b0f 100%);
+}
+.bg-red {
+  background:
+    radial-gradient(70% 60% at 50% 20%, rgba(255,60,60,0.45), transparent 60%),
+    linear-gradient(180deg, #1a0305 0%, #3a0509 60%, #0b0b0f 100%);
+}
+.bg-blue {
+  background:
+    radial-gradient(80% 70% at 50% 30%, rgba(60,140,255,0.45), transparent 60%),
+    linear-gradient(180deg, #04132b 0%, #0a2a55 50%, #030814 100%);
+}
+.bg-silver {
+  background:
+    radial-gradient(80% 60% at 50% 20%, rgba(220,230,240,0.35), transparent 60%),
+    linear-gradient(180deg, #0d1015 0%, #2a3038 55%, #0b0b0f 100%);
+}
+.bg-night {
+  background:
+    radial-gradient(90% 60% at 50% 110%, rgba(0,120,255,0.25), transparent 60%),
+    linear-gradient(180deg, #0b0b0f 0%, #0f1220 55%, #05060a 100%);
+}
+
+/* Grid lines (subtle) ------------------------------ */
+.grid-lines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(70% 60% at 50% 50%, #000 30%, transparent 80%);
+  z-index: 0;
+}
+
+/* Car stage + silhouette wrapper ------------------- */
+.stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+.stage svg {
+  width: 85%;
+  max-height: 55%;
+  filter: drop-shadow(0 40px 30px rgba(0,0,0,0.55));
+}
+
+/* Headline stacking -------------------------------- */
+.headline-stack {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.headline-stack.bottom-left { left: 40px; bottom: 140px; }
+.headline-stack.top-left    { left: 40px; top: 120px; }
+.headline-stack.top-right   { right: 40px; top: 120px; align-items: flex-end; text-align: right; }
+
+/* Price tag badge ---------------------------------- */
+.pricetag {
+  position: absolute;
+  z-index: 4;
+  padding: 22px 30px;
+  border-radius: 30px;
+  background: var(--gold-2);
+  color: var(--ink);
+  transform: rotate(-6deg);
+  box-shadow: 0 14px 0 #8a6f1d, 0 30px 40px rgba(0,0,0,0.45);
+  font-family: 'Luckiest Guy', cursive;
+  letter-spacing: 2px;
+  text-align: center;
+}
+.pricetag .from { font-size: 22px; display: block; }
+.pricetag .amt  { font-size: 78px; line-height: 0.9; }
+.pricetag .per  { font-size: 20px; display: block; opacity: 0.75; }
+.pricetag.top-right { top: 36px; right: 36px; }
+.pricetag.mid-right { top: 45%; right: 40px; }
+.pricetag.bottom-right { bottom: 160px; right: 40px; }
+
+/* Gallery page ------------------------------------- */
+.gallery {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+.gallery h1 {
+  font-family: 'Bungee', cursive;
+  font-size: 44px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.gallery p.sub {
+  opacity: 0.7;
+  margin-bottom: 32px;
+  max-width: 720px;
+}
+.gallery ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+.gallery li a {
+  display: block;
+  padding: 22px;
+  border-radius: 14px;
+  background: #22232c;
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: transform 0.15s, border-color 0.15s;
+}
+.gallery li a:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold-2);
+}
+.gallery li a .kind {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 8px;
+}
+.gallery li a .title {
+  font-weight: 800;
+  font-size: 20px;
+}

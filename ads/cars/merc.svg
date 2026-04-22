@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" aria-label="Mercedes AMG GT silhouette">
+  <defs>
+    <linearGradient id="mb" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#f3f6f8"/>
+      <stop offset="0.5" stop-color="#9ca4aa"/>
+      <stop offset="1" stop-color="#2f363c"/>
+    </linearGradient>
+    <linearGradient id="mg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#c9e6ff"/>
+      <stop offset="1" stop-color="#1c2633"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="600" cy="475" rx="520" ry="22" fill="rgba(0,0,0,0.55)"/>
+  <!-- long-hood GT body -->
+  <path d="M60,410
+           C110,370 180,340 260,330
+           L420,260
+           L600,230
+           L780,230
+           L900,260
+           L1030,300
+           L1140,350
+           L1160,400
+           L1140,420
+           L70,420 Z"
+        fill="url(#mb)" stroke="#1a1e22" stroke-width="6" stroke-linejoin="round"/>
+  <!-- greenhouse - sloped fastback -->
+  <path d="M430,260 L600,230 L780,230 L850,270 L640,285 L470,280 Z" fill="url(#mg)"/>
+  <!-- Panamericana grille hint -->
+  <g fill="#0b0b0b">
+    <rect x="110" y="360" width="140" height="48" rx="6"/>
+  </g>
+  <g stroke="#e9edf0" stroke-width="4" opacity="0.85">
+    <line x1="125" y1="365" x2="125" y2="405"/>
+    <line x1="150" y1="365" x2="150" y2="405"/>
+    <line x1="175" y1="365" x2="175" y2="405"/>
+    <line x1="200" y1="365" x2="200" y2="405"/>
+    <line x1="225" y1="365" x2="225" y2="405"/>
+  </g>
+  <!-- three pointed star on grille -->
+  <g transform="translate(180,385)" fill="#e9edf0">
+    <circle r="12" fill="#0b0b0b" stroke="#e9edf0" stroke-width="3"/>
+    <polygon points="0,-8 7,4 -7,4"/>
+    <polygon points="0,8 -7,-4 7,-4" opacity="0.8"/>
+  </g>
+  <!-- AMG red vent stripe -->
+  <polygon points="720,335 900,320 910,350 720,365" fill="#b6020a" opacity="0.75"/>
+  <!-- headlight -->
+  <polygon points="255,345 320,338 330,360 270,370" fill="#fffbdc"/>
+  <!-- quad exhausts -->
+  <g fill="#111">
+    <rect x="1085" y="395" width="22" height="12" rx="3"/>
+    <rect x="1115" y="395" width="22" height="12" rx="3"/>
+  </g>
+  <!-- wheels -->
+  <circle cx="295" cy="420" r="78" fill="#0a0a0a"/>
+  <circle cx="295" cy="420" r="44" fill="#262626"/>
+  <circle cx="295" cy="420" r="10" fill="#e9edf0"/>
+  <circle cx="935" cy="420" r="78" fill="#0a0a0a"/>
+  <circle cx="935" cy="420" r="44" fill="#262626"/>
+  <circle cx="935" cy="420" r="10" fill="#e9edf0"/>
+  <g stroke="#d0d4d7" stroke-width="4" opacity="0.55">
+    <line x1="295" y1="376" x2="295" y2="464"/>
+    <line x1="251" y1="420" x2="339" y2="420"/>
+    <line x1="264" y1="391" x2="326" y2="449"/>
+    <line x1="326" y1="391" x2="264" y2="449"/>
+    <line x1="935" y1="376" x2="935" y2="464"/>
+    <line x1="891" y1="420" x2="979" y2="420"/>
+    <line x1="904" y1="391" x2="966" y2="449"/>
+    <line x1="966" y1="391" x2="904" y2="449"/>
+  </g>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" aria-label="BMW M4 silhouette">
+  <defs>
+    <linearGradient id="bb" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#2d6bd6"/>
+      <stop offset="0.5" stop-color="#0e3a8a"/>
+      <stop offset="1" stop-color="#041232"/>
+    </linearGradient>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#b8e1ff"/>
+      <stop offset="1" stop-color="#0a1a34"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="600" cy="475" rx="520" ry="22" fill="rgba(0,0,0,0.55)"/>
+  <!-- coupe body (more upright than supercar) -->
+  <path d="M70,415
+           L140,380
+           L260,340
+           L360,290
+           L500,240
+           L760,240
+           L880,280
+           L1020,310
+           L1130,350
+           L1150,400
+           L1140,420
+           L80,420 Z"
+        fill="url(#bb)" stroke="#04122b" stroke-width="6" stroke-linejoin="round"/>
+  <!-- greenhouse -->
+  <path d="M370,290 L520,235 L740,235 L830,285 L690,290 L520,293 Z" fill="url(#bg)"/>
+  <!-- kidney grille -->
+  <g fill="#0a0a0a">
+    <path d="M120,380 L165,360 L195,360 L200,400 L150,410 Z" />
+    <path d="M205,360 L250,360 L260,400 L210,400 Z"/>
+  </g>
+  <!-- M stripe accents (blue-purple-red classic) -->
+  <rect x="860" y="350" width="40" height="8" fill="#1c69d4"/>
+  <rect x="900" y="350" width="40" height="8" fill="#9b3ad4"/>
+  <rect x="940" y="350" width="40" height="8" fill="#e50020"/>
+  <!-- headlight -->
+  <polygon points="160,350 235,340 245,370 175,375" fill="#fffbdc"/>
+  <!-- wheels -->
+  <circle cx="300" cy="420" r="78" fill="#0a0a0a"/>
+  <circle cx="300" cy="420" r="44" fill="#2a2a2a"/>
+  <circle cx="300" cy="420" r="10" fill="#e50020"/>
+  <circle cx="920" cy="420" r="78" fill="#0a0a0a"/>
+  <circle cx="920" cy="420" r="44" fill="#2a2a2a"/>
+  <circle cx="920" cy="420" r="10" fill="#e50020"/>
+  <g stroke="#d6d6d6" stroke-width="4" opacity="0.55">
+    <line x1="300" y1="376" x2="300" y2="464"/>
+    <line x1="256" y1="420" x2="344" y2="420"/>
+    <line x1="269" y1="391" x2="331" y2="449"/>
+    <line x1="331" y1="391" x2="269" y2="449"/>
+    <line x1="920" y1="376" x2="920" y2="464"/>
+    <line x1="876" y1="420" x2="964" y2="420"/>
+    <line x1="889" y1="391" x2="951" y2="449"/>
+    <line x1="951" y1="391" x2="889" y2="449"/>
+  </g>
+</svg>
