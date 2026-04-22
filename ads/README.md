@@ -4,6 +4,9 @@ Eight print/social-ready ad creatives for **ogcarworld.co.uk**.
 
 ## Contents
 
+All ads advertise the real business address:
+**Unit 7, Hainault Business Park, IG6 3XH, London.**
+
 | File | Size | Format | Headline car |
 |---|---|---|---|
 | `01-lamborghini.html` | 1080×1080 | IG / FB feed | Lamborghini Huracán |
@@ -61,7 +64,6 @@ Rebrand globally by editing the `:root` variables in `styles.css`.
 
 ## Caveat
 
-`ogcarworld.co.uk` was unreachable at build time (HTTP 403 on fetch),
-so brand specifics (exact locations, pricing tiers, slogan) are
-placeholders modelled on typical UK luxury-hire positioning. Swap
-values before running paid spend.
+Location is confirmed: **Unit 7, Hainault Business Park, IG6 3XH,
+London**. Prices are placeholders modelled on typical UK luxury-hire
+positioning — swap in the real daily rates before running paid spend.
