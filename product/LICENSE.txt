@@ -1,0 +1,75 @@
+THE UK ROOFER OUTREACH PACK — END USER LICENSE
+================================================
+
+Copyright (c) 2026. All rights reserved.
+
+This License governs your use of "The UK Roofer Outreach Pack" (the
+"Pack"), including the Playbook, message templates, proposal template,
+and landing page contained in this directory.
+
+1. GRANT OF LICENSE
+-------------------
+On purchase, you ("Licensee") are granted a non-exclusive, non-transferable,
+worldwide, perpetual license to use the Pack within ONE (1) business that
+you own or are employed by ("Your Business").
+
+2. PERMITTED USE
+----------------
+You MAY:
+  a. Use, modify, and adapt the templates for outbound messaging by Your
+     Business.
+  b. Use the Playbook to train employees of Your Business.
+  c. Modify and host the included landing page to resell Your Business's
+     services (not the Pack itself — see Section 3).
+  d. Quote up to 200 words from the Playbook in blog posts, social media,
+     or training materials, with attribution.
+
+3. PROHIBITED USE
+-----------------
+You MAY NOT:
+  a. Resell, redistribute, sublicense, or give away the Pack or any
+     substantial portion of it, in original or modified form.
+  b. Use the Pack on behalf of more than one business without purchasing
+     an additional license per business.
+  c. Train a machine learning model on the Pack contents.
+  d. Use the templates for messaging that violates UK PECR, GDPR, the
+     CAN-SPAM Act, or equivalent laws in the recipient's jurisdiction.
+  e. Use the Pack for any unlawful purpose, including fraudulent,
+     deceptive, or harassing messaging.
+
+4. AGENCY EXCEPTION
+-------------------
+If you operate a marketing agency, the single-business limit is replaced
+with a "per active client" limit. You may use the templates on behalf of
+your clients, provided each individual client is informed in writing that
+the templates are licensed material owned by the original author.
+
+5. NO WARRANTY
+--------------
+THE PACK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, OR NONINFRINGEMENT. RESULTS WILL VARY. THE AUTHOR MAKES NO
+GUARANTEE OF REPLY RATES, BOOKINGS, OR REVENUE.
+
+6. LIMITATION OF LIABILITY
+--------------------------
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY ARISING FROM USE OF THE PACK, INCLUDING BUT NOT LIMITED TO
+REGULATORY FINES, COMPLAINTS, OR REPUTATIONAL HARM RESULTING FROM YOUR
+USE OF THE TEMPLATES.
+
+7. REFUND POLICY
+----------------
+A full refund is available within 14 days of purchase, no questions asked,
+by emailing refunds@example.com with your order ID. After 14 days, all
+sales are final.
+
+8. TERMINATION
+--------------
+This License terminates automatically if you breach any term. On
+termination, you must delete all copies of the Pack in your possession.
+
+9. GOVERNING LAW
+----------------
+This License is governed by the laws of England and Wales. Disputes will
+be resolved in the courts of England and Wales.
