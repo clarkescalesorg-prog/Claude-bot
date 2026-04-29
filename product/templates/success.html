@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thanks for your order</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: #0e1116;
+      color: #e6edf3;
+      line-height: 1.55;
+    }
+    .wrap { max-width: 640px; margin: 0 auto; padding: 80px 24px; text-align: center; }
+    h1 { font-size: 36px; margin: 0 0 16px; letter-spacing: -0.02em; }
+    p { color: #8b949e; font-size: 17px; }
+    .btn {
+      display: inline-block;
+      padding: 16px 32px;
+      background: #ff7b00;
+      color: #1a1106;
+      border-radius: 8px;
+      font-size: 17px;
+      font-weight: 600;
+      text-decoration: none;
+      margin: 24px 0;
+    }
+    .pending {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 32px;
+      margin-top: 32px;
+    }
+    code { background: #161b22; padding: 2px 6px; border-radius: 4px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    {% if pending %}
+      <h1>Payment received — finalising your order</h1>
+      <p>This usually takes a few seconds. Refresh the page in a moment to get your download link.</p>
+      <div class="pending">
+        <p>If this page is still pending after a minute, reply to your Stripe receipt and we'll send the file directly.</p>
+      </div>
+    {% else %}
+      <h1>You're in. Welcome aboard.</h1>
+      <p>Your download link is ready. The link is valid for 7 days and works up to 5 times.</p>
+      <a class="btn" href="{{ download_url }}">Download the playbook</a>
+      <p>We've also emailed the link to the address on your Stripe receipt. Bookmark this page if you want to come back later.</p>
+      <p style="margin-top: 48px; font-size: 14px;">Now go open <code>guide.md</code> and start with §3 — the templates. That's the part that books jobs.</p>
+    {% endif %}
+  </div>
+</body>
+</html>

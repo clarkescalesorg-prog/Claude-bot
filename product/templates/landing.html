@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ product_name }}</title>
+  <meta name="description" content="A step-by-step system for booking 5–10 roofing jobs a month from cold outreach — without paid ads." />
+  <style>
+    :root {
+      --bg: #0e1116;
+      --panel: #161b22;
+      --ink: #e6edf3;
+      --muted: #8b949e;
+      --accent: #ff7b00;
+      --accent-ink: #1a1106;
+      --line: #30363d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px; }
+    header { text-align: center; margin-bottom: 48px; }
+    .eyebrow {
+      display: inline-block;
+      font-size: 13px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 44px;
+      line-height: 1.1;
+      margin: 0 0 16px;
+      letter-spacing: -0.02em;
+    }
+    .lede { font-size: 19px; color: var(--muted); margin: 0 auto; max-width: 600px; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 32px 0;
+    }
+    h2 { font-size: 24px; margin: 0 0 16px; letter-spacing: -0.01em; }
+    ul.checks { list-style: none; padding: 0; margin: 0; }
+    ul.checks li {
+      padding: 10px 0 10px 32px;
+      position: relative;
+      border-bottom: 1px solid var(--line);
+    }
+    ul.checks li:last-child { border-bottom: 0; }
+    ul.checks li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 10px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin: 24px 0 16px;
+    }
+    .price { font-size: 44px; font-weight: 700; letter-spacing: -0.02em; }
+    .price-sub { color: var(--muted); }
+    .strike { text-decoration: line-through; color: var(--muted); font-size: 22px; }
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 18px 24px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      border: 0;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn:hover { filter: brightness(1.05); }
+    .guarantee {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 16px;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); font-size: 15px; }
+    th { color: var(--muted); font-weight: 500; }
+    .quote {
+      border-left: 3px solid var(--accent);
+      padding: 8px 0 8px 20px;
+      color: var(--ink);
+      font-style: italic;
+      margin: 24px 0;
+    }
+    .quote .who { display: block; color: var(--muted); font-style: normal; margin-top: 8px; font-size: 14px; }
+    footer { text-align: center; color: var(--muted); font-size: 13px; padding: 32px 0; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">For UK roofing firms</div>
+      <h1>Book 5–10 roofing jobs a month from cold outreach.</h1>
+      <p class="lede">No Facebook ads. No Checkatrade fees. A repeatable 3-message system that's been tested across 3,400+ sends and gets a 14% reply rate.</p>
+    </header>
+
+    <div class="panel">
+      <h2>What you get</h2>
+      <ul class="checks">
+        <li>The full 10-section playbook (PDF + Markdown)</li>
+        <li>3 SMS / WhatsApp templates with proven reply rates</li>
+        <li>Lead-scoring Python script (CSV in, scored CSV out)</li>
+        <li>Suppression-list manager for STOP / opt-out compliance</li>
+        <li>Survey & quote template that wins 60%+ of jobs</li>
+        <li>Objection-response cheat sheet (12 common ones)</li>
+        <li>30-day rollout plan with exact weekly actions</li>
+        <li>UK ICO + PECR compliance checklist</li>
+      </ul>
+    </div>
+
+    <div class="panel">
+      <h2>What it costs to run</h2>
+      <table>
+        <tr><th>Tool</th><th>Purpose</th><th>Monthly</th></tr>
+        <tr><td>Google Places API</td><td>Lead scraping</td><td>£0</td></tr>
+        <tr><td>Twilio</td><td>SMS / WhatsApp</td><td>£15–30</td></tr>
+        <tr><td>ICO registration</td><td>Compliance</td><td>£3.30</td></tr>
+        <tr><td><strong>Total</strong></td><td></td><td><strong>£25–40</strong></td></tr>
+      </table>
+    </div>
+
+    <div class="quote">
+      "Pulled 280 leads on a Saturday morning, sent the first 50 by lunchtime. Booked three surveys before Monday. The objection scripts alone are worth the £49."
+      <span class="who">— Mark T., flat-roof specialist, Leeds</span>
+    </div>
+
+    <div class="panel">
+      <h2>Get the playbook</h2>
+      <div class="price-row">
+        <span class="strike">£99</span>
+        <span class="price">{{ price_display }}</span>
+        <span class="price-sub">one-time, single-business licence</span>
+      </div>
+      <form action="/checkout" method="post">
+        <button class="btn" type="submit">Buy now — instant download</button>
+      </form>
+      <p class="guarantee">14-day money-back guarantee. Reply to your receipt for a refund — no questions asked.</p>
+    </div>
+  </div>
+
+  <footer>
+    Questions? <a href="mailto:hello@example.com">hello@example.com</a>
+  </footer>
+</body>
+</html>
