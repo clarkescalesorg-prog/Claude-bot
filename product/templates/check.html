@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free eligibility checker — UK rebates &amp; refunds</title>
+  <meta name="description" content="Answer 15 yes/no questions and see which UK government rebates, tax reliefs, and refund schemes you may be entitled to. Free." />
+  <style>
+    :root {
+      --bg: #0e1116; --panel: #161b22; --ink: #e6edf3; --muted: #8b949e;
+      --accent: #ff7b00; --accent-2: #2ea043; --accent-ink: #1a1106; --line: #30363d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg); color: var(--ink); line-height: 1.55;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px; }
+    .home { display: inline-block; color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+    h1 { font-size: 36px; line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.02em; }
+    .lede { color: var(--muted); margin: 0 0 32px; font-size: 17px; }
+    fieldset {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+      padding: 16px 20px; margin: 0 0 14px;
+    }
+    legend { padding: 0 8px; color: var(--muted); font-size: 13px; }
+    .q { font-size: 16px; margin: 0 0 10px; }
+    .opts { display: flex; flex-wrap: wrap; gap: 10px; }
+    .opts label {
+      cursor: pointer; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px;
+      background: var(--bg); color: var(--ink); font-size: 14px;
+    }
+    .opts input[type="radio"] { display: none; }
+    .opts input[type="radio"]:checked + span { color: var(--accent-ink); }
+    .opts label:has(input:checked) { background: var(--accent); border-color: var(--accent); }
+    .btn {
+      display: inline-block; padding: 14px 22px; background: var(--accent);
+      color: var(--accent-ink); border: 0; border-radius: 8px; font-size: 17px;
+      font-weight: 600; cursor: pointer; text-decoration: none;
+    }
+    .btn:hover { filter: brightness(1.05); }
+    .btn.full { width: 100%; padding: 16px; font-size: 17px; text-align: center; }
+    .btn.secondary { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+    .btn-row { margin: 24px 0 0; display: flex; gap: 12px; }
+    .results-summary {
+      background: linear-gradient(135deg, rgba(255,123,0,0.12), rgba(46,160,67,0.12));
+      border: 1px solid var(--accent); border-radius: 12px; padding: 28px;
+      margin: 0 0 24px;
+    }
+    .results-summary h2 { margin: 0 0 8px; font-size: 22px; }
+    .results-summary .total { font-size: 32px; font-weight: 700; color: var(--accent); margin: 8px 0; }
+    .results-summary .sub { color: var(--muted); font-size: 14px; }
+    .claim {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+      padding: 20px; margin: 0 0 12px;
+    }
+    .claim h3 { margin: 0 0 4px; font-size: 18px; }
+    .claim .value {
+      display: inline-block; background: rgba(46,160,67,0.15); color: #56d364;
+      padding: 2px 10px; border-radius: 4px; font-size: 14px; font-weight: 600;
+      margin-left: 8px;
+    }
+    .claim .why, .claim .next { margin: 8px 0 0; font-size: 15px; }
+    .claim .why { color: var(--muted); }
+    .claim a { color: var(--accent); }
+    .empty {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+      padding: 32px; text-align: center; color: var(--muted);
+    }
+    .upsell {
+      margin: 32px 0 0; padding: 28px; border-radius: 12px;
+      border: 1px dashed var(--accent); background: rgba(255,123,0,0.05);
+      text-align: center;
+    }
+    .upsell h3 { margin: 0 0 8px; font-size: 22px; }
+    .upsell p { color: var(--muted); margin: 0 0 16px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="home" href="/">← all products</a>
+
+    {% if results is none %}
+      <h1>Free eligibility checker</h1>
+      <p class="lede">15 quick questions. Get a personalised list of UK rebates, tax reliefs, and refund routes you may be entitled to. Nothing is stored — answers don't leave your browser session.</p>
+
+      <form method="post" action="/check">
+        {% for q in questions %}
+          <fieldset>
+            <legend>Question {{ loop.index }} of {{ questions|length }}</legend>
+            <p class="q">{{ q.label }}</p>
+            <div class="opts">
+              {% for opt in q.options %}
+                <label>
+                  <input type="radio" name="{{ q.key }}" value="{{ opt }}"{% if loop.first %} required{% endif %} />
+                  <span>{{ opt|replace('_', ' ')|title }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        {% endfor %}
+        <div class="btn-row">
+          <button class="btn full" type="submit">Show my results</button>
+        </div>
+      </form>
+    {% else %}
+      <h1>Your personalised results</h1>
+
+      {% if results %}
+        <div class="results-summary">
+          <h2>You may be entitled to claim from {{ results|length }} scheme{{ 's' if results|length != 1 else '' }}</h2>
+          <div class="total">£{{ "{:,}".format(min_total) }} – £{{ "{:,}".format(max_total) }}</div>
+          <p class="sub">Estimated combined value, based on official scheme rates. Actual amounts depend on your specific circumstances.</p>
+        </div>
+
+        {% for c in results %}
+          <div class="claim">
+            <h3>{{ c.title }} <span class="value">{{ c.estimated_label }}</span></h3>
+            <p class="why">{{ c.why_you_qualify }}</p>
+            <p class="next"><strong>Next step:</strong> {{ c.next_step }}</p>
+            <p><a href="{{ c.gov_uk_link }}" target="_blank" rel="noopener">Official gov.uk / regulator page →</a></p>
+          </div>
+        {% endfor %}
+
+        <div class="upsell">
+          <h3>Get the full pack — letters, tracker, walkthroughs</h3>
+          <p>The Money-Back Pack includes copy-and-paste letter templates for the trickier claims, a spreadsheet to track every submission, and the full 18-section guide with edge cases and gotchas.</p>
+          <a class="btn" href="/p/{{ product.slug }}">Get the pack — {{ product.price_display }}</a>
+        </div>
+      {% else %}
+        <div class="empty">
+          <p>Based on your answers, none of the schemes covered in this checker apply right now.</p>
+          <p>That's good news — but worth retaking if your circumstances change (move home, retire, get married, child reaches school age, leave a job, etc.).</p>
+        </div>
+      {% endif %}
+
+      <div class="btn-row">
+        <a class="btn secondary" href="/check">Retake the checker</a>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
