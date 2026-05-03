@@ -105,5 +105,26 @@ def update(lead_id: int, new_status: str):
     console.print(f"[green]Lead {lead_id} updated to '{new_status}'.[/green]")
 
 
+@cli.command("instagram")
+@click.option("--count", default=10, show_default=True, help="Number of prompts to generate")
+@click.option("--no-save", is_flag=True, help="Print prompts without saving to file")
+def instagram(count: int, no_save: bool):
+    """Generate Instagram post prompts for your marketing agency."""
+    from pathlib import Path
+
+    from instagram.prompt_generator import generate_batch, save_prompts
+
+    prompts = generate_batch(count)
+
+    for p in prompts:
+        console.print(f"\n[bold yellow][{p['number']:02d}] {p['type']} — {p['niche']}[/bold yellow]")
+        console.print(f"     {p['prompt']}")
+
+    if not no_save:
+        output_dir = Path("instagram/output")
+        filepath = save_prompts(prompts, output_dir)
+        console.print(f"\n[green]Saved {len(prompts)} prompts →[/green] {filepath}")
+
+
 if __name__ == "__main__":
     cli()
