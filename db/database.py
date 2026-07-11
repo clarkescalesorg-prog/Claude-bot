@@ -25,7 +25,10 @@ def _init_schema(conn: sqlite3.Connection) -> None:
 
 
 def upsert_lead(conn: sqlite3.Connection, lead: dict) -> int:
-    cur = conn.execute(
+    # Deliberately not using cursor.lastrowid here: for the ON CONFLICT DO
+    # UPDATE branch, SQLite doesn't reset it, so it can return a stale rowid
+    # left over from a prior, unrelated insert on this connection.
+    conn.execute(
         """
         INSERT INTO leads (place_id, name, phone, website, city, review_count, rating)
         VALUES (:place_id, :name, :phone, :website, :city, :review_count, :rating)
@@ -40,8 +43,6 @@ def upsert_lead(conn: sqlite3.Connection, lead: dict) -> int:
         lead,
     )
     conn.commit()
-    if cur.lastrowid:
-        return cur.lastrowid
     row = conn.execute("SELECT id FROM leads WHERE place_id = ?", (lead["place_id"],)).fetchone()
     return row["id"]
 

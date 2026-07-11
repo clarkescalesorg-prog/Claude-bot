@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from twilio.base.exceptions import TwilioRestException
+
 import outreach.scheduler as scheduler_module
 from db.database import get_conn, log_message, upsert_lead
 from outreach.scheduler import within_sending_window
@@ -88,3 +90,61 @@ def test_process_due_paces_between_multiple_sends(monkeypatch):
 
     assert (sent, failed) == (2, 0)
     assert sleeps == [scheduler_module.SEND_DELAY_SECONDS]
+
+
+def test_process_due_marks_lead_unsubscribed_on_carrier_opt_out_error(monkeypatch):
+    conn = get_conn()
+    lead_id = upsert_lead(conn, {
+        "place_id": "place-optout-1",
+        "name": "Opted Out Roofing",
+        "phone": "+441111111300",
+        "website": "",
+        "city": "Bath",
+        "review_count": 33,
+        "rating": 4.2,
+    })
+    due = (datetime.utcnow() - timedelta(minutes=1)).isoformat(sep=" ", timespec="seconds")
+    log_message(conn, lead_id, 1, "sms", "hi", due)
+
+    err = TwilioRestException(status=400, uri="/Messages", msg="blocked", code=21610)
+    monkeypatch.setattr(scheduler_module, "within_sending_window", lambda now=None: True)
+
+    def _raise(phone, body):
+        raise err
+
+    monkeypatch.setattr(scheduler_module, "send", _raise)
+
+    sent, failed = scheduler_module.process_due(conn)
+
+    assert (sent, failed) == (0, 1)
+    row = conn.execute("SELECT status FROM leads WHERE id=?", (lead_id,)).fetchone()
+    assert row["status"] == "unsubscribed"
+
+
+def test_process_due_marks_failed_without_unsubscribe_on_other_twilio_error(monkeypatch):
+    conn = get_conn()
+    lead_id = upsert_lead(conn, {
+        "place_id": "place-other-error-1",
+        "name": "Other Error Roofing",
+        "phone": "+441111111301",
+        "website": "",
+        "city": "Bath",
+        "review_count": 33,
+        "rating": 4.2,
+    })
+    due = (datetime.utcnow() - timedelta(minutes=1)).isoformat(sep=" ", timespec="seconds")
+    log_message(conn, lead_id, 1, "sms", "hi", due)
+
+    err = TwilioRestException(status=400, uri="/Messages", msg="invalid number", code=21211)
+    monkeypatch.setattr(scheduler_module, "within_sending_window", lambda now=None: True)
+
+    def _raise(phone, body):
+        raise err
+
+    monkeypatch.setattr(scheduler_module, "send", _raise)
+
+    sent, failed = scheduler_module.process_due(conn)
+
+    assert (sent, failed) == (0, 1)
+    row = conn.execute("SELECT status FROM leads WHERE id=?", (lead_id,)).fetchone()
+    assert row["status"] == "new"

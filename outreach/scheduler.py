@@ -2,6 +2,8 @@ import sqlite3
 import time
 from datetime import datetime, timedelta
 
+from twilio.base.exceptions import TwilioRestException
+
 from config import OUTREACH_CHANNEL, SEND_DELAY_SECONDS, SEND_HOUR_END, SEND_HOUR_START
 from db.database import (
     fetch_due_messages,
@@ -14,6 +16,11 @@ from outreach.messages import render
 from outreach.twilio_client import send
 
 FOLLOW_UP_DAYS = {1: 0, 2: 3, 3: 7}
+
+# Twilio error code for "attempt to send to unsubscribed recipient" — set when
+# a lead has opted out at the carrier level (e.g. texted STOP directly to the
+# number), which never reaches our /sms webhook.
+_TWILIO_UNSUBSCRIBED_ERROR_CODE = 21610
 
 
 def within_sending_window(now: datetime | None = None) -> bool:
@@ -64,6 +71,12 @@ def process_due(conn: sqlite3.Connection, dry_run: bool = False) -> tuple[int, i
             sid = send(phone, msg["body"])
             mark_message_sent(conn, msg["id"], sid)
             sent += 1
+        except TwilioRestException as exc:
+            print(f"Failed to send to {phone}: {exc}")
+            mark_message_failed(conn, msg["id"])
+            failed += 1
+            if exc.code == _TWILIO_UNSUBSCRIBED_ERROR_CODE:
+                update_lead_status(conn, msg["lead_id"], "unsubscribed")
         except Exception as exc:
             print(f"Failed to send to {phone}: {exc}")
             mark_message_failed(conn, msg["id"])
