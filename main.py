@@ -93,6 +93,31 @@ def status():
     show_pipeline(conn)
 
 
+@cli.command(name="export")
+@click.option("--tier", type=click.Choice(["hot", "warm", "cold"]), help="Only export leads in this tier")
+@click.option("--status", "status_filter",
+              type=click.Choice(["new", "contacted", "replied", "booked", "rejected", "unsubscribed"]),
+              help="Only export leads with this status")
+@click.option("--out", "out_path", default="leads_export.csv", show_default=True, help="Output CSV path")
+def export_leads(tier: str, status_filter: str, out_path: str):
+    """Export leads to a CSV file (e.g. for a spreadsheet, report, or another CRM)."""
+    import csv
+
+    from db.database import fetch_leads, get_conn
+
+    conn = get_conn()
+    leads = fetch_leads(conn, tier=tier, status=status_filter)
+
+    fieldnames = ["id", "name", "phone", "website", "city", "review_count", "rating", "tier", "status", "created_at"]
+    with open(out_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        for lead in leads:
+            writer.writerow({field: lead[field] for field in fieldnames})
+
+    console.print(f"[green]Exported {len(leads)} leads to {out_path}[/green]")
+
+
 @cli.command()
 @click.option("--host", default="0.0.0.0", show_default=True)
 @click.option("--port", default=5000, show_default=True)

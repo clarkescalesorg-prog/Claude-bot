@@ -47,7 +47,21 @@ Real sends (not dry runs) only go out between `SEND_HOUR_START` and
 queued and go out on the next run inside it, so leads never get texted at
 2am. Sends within a batch are spaced `SEND_DELAY_SECONDS` apart rather than
 fired as one burst, and a transient Twilio error (429/5xx) is retried once
-before the message is marked failed.
+before the message is marked failed. If a lead has opted out at the carrier
+level (e.g. texted STOP directly to the number, bypassing our webhook),
+Twilio's send error is detected and the lead is auto-marked `unsubscribed`
+so future follow-up steps stop targeting them.
+
+## Exporting leads
+
+```bash
+python main.py export --tier hot --out hot_leads.csv
+```
+
+Writes leads to a CSV (id, name, phone, website, city, review count, rating,
+tier, status, created date) for a spreadsheet, client report, or import into
+another CRM. `--tier` and `--status` are both optional filters; omit both to
+export everything.
 
 ## Running unattended (`daemon`)
 
