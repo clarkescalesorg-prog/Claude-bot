@@ -9,6 +9,7 @@ def show_pipeline(conn: sqlite3.Connection) -> None:
     _show_lead_summary(conn)
     _show_message_summary(conn)
     _show_recent_leads(conn)
+    _show_recent_replies(conn)
 
 
 def _show_lead_summary(conn: sqlite3.Connection) -> None:
@@ -81,5 +82,24 @@ def _show_recent_leads(conn: sqlite3.Connection) -> None:
             str(row["review_count"]),
             row["status"],
         )
+
+    console.print(table)
+
+
+def _show_recent_replies(conn: sqlite3.Connection) -> None:
+    from db.database import fetch_recent_replies
+
+    rows = fetch_recent_replies(conn, limit=20)
+    if not rows:
+        return
+
+    table = Table(title="Recent Replies (last 20)", show_lines=True)
+    table.add_column("Received", style="dim")
+    table.add_column("Business")
+    table.add_column("Phone")
+    table.add_column("Message")
+
+    for row in rows:
+        table.add_row(row["received_at"], row["name"], row["phone"] or "—", row["body"])
 
     console.print(table)

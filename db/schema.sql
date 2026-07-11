@@ -26,5 +26,15 @@ CREATE TABLE IF NOT EXISTS messages (
     UNIQUE(lead_id, step)
 );
 
+CREATE TABLE IF NOT EXISTS replies (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    lead_id     INTEGER NOT NULL REFERENCES leads(id),
+    body        TEXT    NOT NULL,
+    from_number TEXT,
+    received_at TEXT    DEFAULT (datetime('now'))
+);
+
 CREATE INDEX IF NOT EXISTS idx_messages_due ON messages(due_at, status);
 CREATE INDEX IF NOT EXISTS idx_leads_tier   ON leads(tier, status);
+CREATE INDEX IF NOT EXISTS idx_leads_phone  ON leads(phone);
+CREATE INDEX IF NOT EXISTS idx_replies_lead ON replies(lead_id);

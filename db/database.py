@@ -103,3 +103,28 @@ def update_lead_status(conn: sqlite3.Connection, lead_id: int, status: str) -> N
         (status, lead_id),
     )
     conn.commit()
+
+
+def find_lead_by_phone(conn: sqlite3.Connection, phone: str) -> sqlite3.Row | None:
+    return conn.execute("SELECT * FROM leads WHERE phone = ?", (phone,)).fetchone()
+
+
+def log_reply(conn: sqlite3.Connection, lead_id: int, body: str, from_number: str) -> None:
+    conn.execute(
+        "INSERT INTO replies (lead_id, body, from_number) VALUES (?, ?, ?)",
+        (lead_id, body, from_number),
+    )
+    conn.commit()
+
+
+def fetch_recent_replies(conn: sqlite3.Connection, limit: int = 20) -> list[sqlite3.Row]:
+    return conn.execute(
+        """
+        SELECT r.received_at, l.id AS lead_id, l.name, l.phone, r.body
+        FROM replies r
+        JOIN leads l ON l.id = r.lead_id
+        ORDER BY r.received_at DESC
+        LIMIT ?
+        """,
+        (limit,),
+    ).fetchall()

@@ -94,6 +94,18 @@ def status():
 
 
 @cli.command()
+@click.option("--host", default="0.0.0.0", show_default=True)
+@click.option("--port", default=5000, show_default=True)
+def serve(host: str, port: int):
+    """Run the inbound webhook server that catches SMS/WhatsApp replies (incl. STOP opt-outs)."""
+    from outreach.webhook import app as webhook_app
+
+    console.print(f"[cyan]Starting webhook server on {host}:{port}...[/cyan]")
+    console.print("[dim]Point your Twilio number's messaging webhook to POST https://<your-domain>/sms[/dim]")
+    webhook_app.run(host=host, port=port)
+
+
+@cli.command()
 @click.argument("lead_id", type=int)
 @click.argument("new_status", type=click.Choice(["new", "contacted", "replied", "booked", "rejected", "unsubscribed"]))
 def update(lead_id: int, new_status: str):
