@@ -106,6 +106,21 @@ def serve(host: str, port: int):
 
 
 @cli.command()
+@click.option("--host", default="0.0.0.0", show_default=True)
+@click.option("--port", default=5000, show_default=True)
+def daemon(host: str, port: int):
+    """Run unattended: inbound reply webhook + scheduled follow-up sends, until interrupted."""
+    from config import FOLLOWUP_INTERVAL_MINUTES, SEND_HOUR_END, SEND_HOUR_START
+    from outreach.daemon import run
+
+    console.print(f"[cyan]Starting daemon on {host}:{port}...[/cyan]")
+    console.print(f"[dim]Follow-ups checked every {FOLLOWUP_INTERVAL_MINUTES} min, "
+                   f"sent only between {SEND_HOUR_START}:00-{SEND_HOUR_END}:00.[/dim]")
+    console.print("[dim]Point your Twilio number's messaging webhook to POST https://<your-domain>/sms[/dim]")
+    run(host, port)
+
+
+@cli.command()
 @click.argument("lead_id", type=int)
 @click.argument("new_status", type=click.Choice(["new", "contacted", "replied", "booked", "rejected", "unsubscribed"]))
 def update(lead_id: int, new_status: str):

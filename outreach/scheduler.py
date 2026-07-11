@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import datetime, timedelta
 
-from config import OUTREACH_CHANNEL
+from config import OUTREACH_CHANNEL, SEND_HOUR_END, SEND_HOUR_START
 from db.database import (
     fetch_due_messages,
     log_message,
@@ -13,6 +13,12 @@ from outreach.messages import render
 from outreach.twilio_client import send
 
 FOLLOW_UP_DAYS = {1: 0, 2: 3, 3: 7}
+
+
+def within_sending_window(now: datetime | None = None) -> bool:
+    """Whether it's currently an acceptable local time to send outreach messages."""
+    now = now or datetime.now()
+    return SEND_HOUR_START <= now.hour < SEND_HOUR_END
 
 
 def queue_outreach(conn: sqlite3.Connection, lead: sqlite3.Row) -> None:
@@ -27,9 +33,19 @@ def queue_outreach(conn: sqlite3.Connection, lead: sqlite3.Row) -> None:
 
 
 def process_due(conn: sqlite3.Connection, dry_run: bool = False) -> tuple[int, int]:
-    """Send all due messages. Returns (sent, failed) counts."""
+    """Send all due messages. Returns (sent, failed) counts.
+
+    Outside dry runs, real sends are skipped when it's outside the configured
+    SEND_HOUR_START/SEND_HOUR_END window — due messages simply stay pending
+    and go out on the next run within the window.
+    """
     due = fetch_due_messages(conn)
     sent = failed = 0
+
+    if due and not dry_run and not within_sending_window():
+        print(f"[skip] {len(due)} message(s) due but outside sending hours "
+              f"({SEND_HOUR_START}:00-{SEND_HOUR_END}:00) — will retry later.")
+        return sent, failed
 
     for msg in due:
         phone = msg["phone"]

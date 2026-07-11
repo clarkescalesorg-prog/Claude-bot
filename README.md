@@ -23,6 +23,8 @@ Required environment variables (see `.env.example`):
 | `OUTREACH_CHANNEL` | `sms` or `whatsapp` |
 | `YOUR_NAME` | Sign-off name used in message templates |
 | `DB_PATH` | SQLite file path (defaults to `roofers.db`) |
+| `SEND_HOUR_START` / `SEND_HOUR_END` | Local-hour window outreach is allowed to send in (default `9`-`18`) |
+| `FOLLOWUP_INTERVAL_MINUTES` | How often `daemon` checks for due follow-ups (default `30`) |
 
 `.env` and `*.db` are gitignored — they hold real API secrets and prospect
 contact details, so never commit them.
@@ -39,18 +41,32 @@ python main.py status                                 # dashboard: pipeline, mes
 
 Add `--dry-run` to `outreach`/`followup` to preview messages without sending.
 
-Run `followup` on a schedule (cron, or `apscheduler`) so steps 2 (day 3) and
-3 (day 7) go out automatically.
+Real sends (not dry runs) only go out between `SEND_HOUR_START` and
+`SEND_HOUR_END` local time — messages due outside that window just stay
+queued and go out on the next run inside it, so leads never get texted at
+2am.
 
-## Capturing replies (`serve`)
+## Running unattended (`daemon`)
 
 ```bash
-python main.py serve --port 5000
+python main.py daemon --port 5000
 ```
 
-This starts a webhook server. Point your Twilio number's inbound messaging
-webhook at `https://<your-domain>/sms` (use a tunnel like ngrok for local
-testing). Every inbound reply is:
+One process that does both:
+
+- Runs the inbound webhook (see below) so replies/STOPs are captured live.
+- Checks for due follow-ups every `FOLLOWUP_INTERVAL_MINUTES` and sends them
+  (respecting the sending-hours window above) — so steps 2 (day 3) and 3
+  (day 7) go out automatically with nothing to remember to run.
+
+Use `python main.py serve` instead if you only want the webhook (e.g. you're
+already triggering `followup` from your own cron).
+
+## Capturing replies
+
+Whichever of `serve`/`daemon` you run, point your Twilio number's inbound
+messaging webhook at `https://<your-domain>/sms` (use a tunnel like ngrok for
+local testing). Every inbound reply is:
 
 - Logged to the `replies` table and shown in `python main.py status`.
 - Auto-marked as `replied` on the lead, so you know who to call back — no
