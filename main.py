@@ -48,10 +48,11 @@ def segment():
 
 @cli.command()
 @click.option("--tier", default="hot", type=click.Choice(["hot", "warm", "cold"]), show_default=True)
-@click.option("--dry-run", is_flag=True, help="Print messages without sending")
+@click.option("--dry-run", is_flag=True, help="Preview messages only — no DB changes, nothing queued or sent")
 def outreach(tier: str, dry_run: bool):
     """Queue and send initial outreach to leads in a given tier."""
     from db.database import fetch_leads, get_conn
+    from outreach.messages import render
     from outreach.scheduler import process_due, queue_outreach
 
     conn = get_conn()
@@ -61,13 +62,20 @@ def outreach(tier: str, dry_run: bool):
         console.print(f"[yellow]No new {tier} leads to contact.[/yellow]")
         return
 
+    if dry_run:
+        console.print(f"[cyan]Previewing outreach for {len(leads)} {tier} leads (nothing saved)...[/cyan]")
+        for lead in leads:
+            body = render(1, lead["name"], lead["city"])
+            console.print(f"[DRY RUN] → {lead['phone']} (step 1)\n{body}\n")
+        console.print(f"\n[bold][DRY RUN] Would queue: {len(leads)}[/bold]")
+        return
+
     console.print(f"[cyan]Queueing outreach for {len(leads)} {tier} leads...[/cyan]")
     for lead in leads:
         queue_outreach(conn, lead)
 
-    sent, failed = process_due(conn, dry_run=dry_run)
-    label = "[DRY RUN] " if dry_run else ""
-    console.print(f"\n[bold]{label}Sent: {sent}  Failed: {failed}[/bold]")
+    sent, failed = process_due(conn)
+    console.print(f"\n[bold]Sent: {sent}  Failed: {failed}[/bold]")
 
 
 @cli.command()
