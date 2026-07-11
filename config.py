@@ -19,3 +19,7 @@ SEND_HOUR_END = int(os.getenv("SEND_HOUR_END", "18"))
 
 # How often the `daemon` command checks for due follow-ups, in minutes.
 FOLLOWUP_INTERVAL_MINUTES = int(os.getenv("FOLLOWUP_INTERVAL_MINUTES", "30"))
+
+# Pause between real sends within a single run, so a batch of due messages
+# doesn't fire as one burst (which risks carrier spam filtering).
+SEND_DELAY_SECONDS = float(os.getenv("SEND_DELAY_SECONDS", "1"))

@@ -25,6 +25,7 @@ Required environment variables (see `.env.example`):
 | `DB_PATH` | SQLite file path (defaults to `roofers.db`) |
 | `SEND_HOUR_START` / `SEND_HOUR_END` | Local-hour window outreach is allowed to send in (default `9`-`18`) |
 | `FOLLOWUP_INTERVAL_MINUTES` | How often `daemon` checks for due follow-ups (default `30`) |
+| `SEND_DELAY_SECONDS` | Pause between real sends in a batch, to avoid carrier spam filtering (default `1`) |
 
 `.env` and `*.db` are gitignored — they hold real API secrets and prospect
 contact details, so never commit them.
@@ -44,7 +45,9 @@ Add `--dry-run` to `outreach`/`followup` to preview messages without sending.
 Real sends (not dry runs) only go out between `SEND_HOUR_START` and
 `SEND_HOUR_END` local time — messages due outside that window just stay
 queued and go out on the next run inside it, so leads never get texted at
-2am.
+2am. Sends within a batch are spaced `SEND_DELAY_SECONDS` apart rather than
+fired as one burst, and a transient Twilio error (429/5xx) is retried once
+before the message is marked failed.
 
 ## Running unattended (`daemon`)
 

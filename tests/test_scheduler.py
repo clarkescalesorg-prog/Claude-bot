@@ -58,3 +58,33 @@ def test_process_due_dry_run_ignores_window(monkeypatch, capsys):
     sent, failed = scheduler_module.process_due(conn, dry_run=True)
 
     assert (sent, failed) == (1, 0)
+
+
+def test_process_due_paces_between_multiple_sends(monkeypatch):
+    conn = get_conn()
+    # Clear any leftover pending messages from earlier tests so the count below is deterministic.
+    conn.execute("UPDATE messages SET status='sent' WHERE status='pending'")
+    conn.commit()
+
+    due = (datetime.utcnow() - timedelta(minutes=1)).isoformat(sep=" ", timespec="seconds")
+    for i, place_id in enumerate(["place-pace-1", "place-pace-2"]):
+        lead_id = upsert_lead(conn, {
+            "place_id": place_id,
+            "name": f"Pace Roofing {i}",
+            "phone": f"+44111111120{i}",
+            "website": "",
+            "city": "Hull",
+            "review_count": 40,
+            "rating": 4.5,
+        })
+        log_message(conn, lead_id, 1, "sms", f"hi {i}", due)
+
+    monkeypatch.setattr(scheduler_module, "within_sending_window", lambda now=None: True)
+    monkeypatch.setattr(scheduler_module, "send", lambda phone, body: "SMfake")
+    sleeps = []
+    monkeypatch.setattr(scheduler_module.time, "sleep", lambda seconds: sleeps.append(seconds))
+
+    sent, failed = scheduler_module.process_due(conn)
+
+    assert (sent, failed) == (2, 0)
+    assert sleeps == [scheduler_module.SEND_DELAY_SECONDS]

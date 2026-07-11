@@ -1,7 +1,8 @@
 import sqlite3
+import time
 from datetime import datetime, timedelta
 
-from config import OUTREACH_CHANNEL, SEND_HOUR_END, SEND_HOUR_START
+from config import OUTREACH_CHANNEL, SEND_DELAY_SECONDS, SEND_HOUR_END, SEND_HOUR_START
 from db.database import (
     fetch_due_messages,
     log_message,
@@ -47,7 +48,7 @@ def process_due(conn: sqlite3.Connection, dry_run: bool = False) -> tuple[int, i
               f"({SEND_HOUR_START}:00-{SEND_HOUR_END}:00) — will retry later.")
         return sent, failed
 
-    for msg in due:
+    for i, msg in enumerate(due):
         phone = msg["phone"]
         if not phone:
             mark_message_failed(conn, msg["id"])
@@ -67,5 +68,8 @@ def process_due(conn: sqlite3.Connection, dry_run: bool = False) -> tuple[int, i
             print(f"Failed to send to {phone}: {exc}")
             mark_message_failed(conn, msg["id"])
             failed += 1
+
+        if SEND_DELAY_SECONDS > 0 and i < len(due) - 1:
+            time.sleep(SEND_DELAY_SECONDS)
 
     return sent, failed
